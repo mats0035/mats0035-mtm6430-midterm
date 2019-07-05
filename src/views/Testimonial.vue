@@ -7,20 +7,22 @@
         <p>{{ list.comment }}</p>
       </div>
     </div>
-    <div>
-      <h2>Leave us a testimonial</h2>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" @submit.prevent="submitForm('ruleForm')">
-        <el-form-item prop="name" class="two-columns">
-          <el-input v-model="ruleForm.name" placeholder="Your Name"></el-input>
-        </el-form-item>
-        <el-form-item prop="position" class="two-columns">
-          <el-input v-model="ruleForm.position" placeholder="Position Title"></el-input>
-        </el-form-item>
-        <el-form-item prop="comment">
-          <el-input type="textarea" v-model="ruleForm.comment" placeholder="Your Comments"></el-input>
-        </el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">Submit</el-button>
-      </el-form>
+    <div class="testimonial-form">
+      <div>
+        <h2>Leave us a testimonial</h2>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" @submit.prevent="submitForm('ruleForm')">
+          <el-form-item prop="name" class="two-columns">
+            <el-input v-model="ruleForm.name" placeholder="Your Name"></el-input>
+          </el-form-item>
+          <el-form-item prop="position" class="two-columns">
+            <el-input v-model="ruleForm.position" placeholder="Position Title"></el-input>
+          </el-form-item>
+          <el-form-item prop="comment">
+            <el-input type="textarea" v-model="ruleForm.comment" placeholder="Your Comments"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">Submit</el-button>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -99,12 +101,11 @@ export default {
           axios
           .post("https://mats0035-midterm-axios.firebaseio.com/data.json", obj)
           .then(response=>{
-            // get the new data from server and add to testimon
+            // get the new data from the database and add to testimonial
             axios
             .get("https://mats0035-midterm-axios.firebaseio.com/data.json")
             .then(response => {
               console.log(response.data);
-              // if(response)this.testimonialList2.push(response.data);
               if(response.data)this.testimonialList = response.data;
             })
 
@@ -148,6 +149,19 @@ export default {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    margin-left: 6px;
+  }
+
+  .testimonial-form {
+    border: 1px solid #160a4d;
+    padding-bottom: 60px;
+    margin: 10px;
+  }
+
+  .testimonial-form > div {
+    position: relative;
+    margin: auto;
+    width: 80%;
   }
 
   .testimonial-box {
@@ -155,6 +169,10 @@ export default {
     margin: 5px;
     padding: 10px;
     background-color: #e0daff;
+  }
+
+  .testimonial-box p {
+    margin: 5px;
   }
 
   .testimonial-box:nth-child(odd), .two-columns:first-child {

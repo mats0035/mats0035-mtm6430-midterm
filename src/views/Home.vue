@@ -30,6 +30,7 @@ export default {
     padding-top: 100px;
     padding-bottom: 70px;
   }
+  
   .container {
     display: flex;
   }
@@ -37,5 +38,4 @@ export default {
   .container * {
     margin: 10px;
   }
-
 </style>
