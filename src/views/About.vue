@@ -5,10 +5,9 @@
       <img :src="firstImg">
       <p>{{ firstPara }}</p>
     </div>
-      <div class="about-container">
+    <div class="about-container">
       <p>{{ secondPara }}</p>
       <img :src="secondImg">
-      </div>
     </div>
   </div>
 </template>
