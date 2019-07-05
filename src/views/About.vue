@@ -33,12 +33,14 @@ export default {
     padding-top: 100px;
     padding-bottom: 70px;
   }
+
   .about-container {
     display: flex;
     justify-content: center;
     align-items: center;
 
   }
+
   .about-container * {
     margin: 10px;
   }

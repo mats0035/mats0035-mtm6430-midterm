@@ -1,20 +1,19 @@
 <template>
   <div class="testimonial">
     <h1>Testimonials</h1>
-    <!-- <MakeTestimonial :testimonialList="testimonialList"/> -->
     <div class="testimonial-container">
       <div v-for="list in testimonialList" class="testimonial-box">
-        <p>{{ list.name }} - {{ list.position }}</p>
+        <p><strong>{{ list.name }} - {{ list.position }}</strong></p>
         <p>{{ list.comment }}</p>
       </div>
-      <!-- <span>{{ iterate() }}</span> -->
     </div>
     <div>
+      <h2>Leave us a testimonial</h2>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" @submit.prevent="submitForm('ruleForm')">
-        <el-form-item prop="name">
+        <el-form-item prop="name" class="two-columns">
           <el-input v-model="ruleForm.name" placeholder="Your Name"></el-input>
         </el-form-item>
-        <el-form-item prop="position">
+        <el-form-item prop="position" class="two-columns">
           <el-input v-model="ruleForm.position" placeholder="Position Title"></el-input>
         </el-form-item>
         <el-form-item prop="comment">
@@ -26,8 +25,25 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-  data () {
+  data: function () {
+    // If the words are more than 50 words, show an error message
+    var wordCount1 = (rule, value, callback) => {
+      if (value.split(' ').length >= 50) {
+        callback(new Error('This field cannot be more than 50 words'));
+      } else {
+        callback();
+      }
+    };
+    // If the words are more than 120 words, show an error message
+    var wordCount2 = (rule, value, callback) => {
+      if (value.split(' ').length >= 120) {
+        callback(new Error('This field cannot be more than 120 words'));
+      } else {
+        callback();
+      }
+    };
     return {
       testimonialList: [],
       ruleForm: {
@@ -39,21 +55,30 @@ export default {
         name: [
           {
             required: true,
-            message: "First ame is required",
+            message: "This field is required"
+          },
+          {
+            validator: wordCount1,
             trigger: "blur"
           }
         ],
         position: [
           {
             required: true,
-            message: "Last Name is required",
+            message: "This field is required",
+          },
+          {
+            validator: wordCount1,
             trigger: "blur"
           }
         ],
         comment: [
           {
             required: true,
-            message: "This field is required",
+            message: "This field is required"
+          },
+          {
+            validator: wordCount2,
             trigger: "blur"
           }
         ]
@@ -62,7 +87,7 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      // Check if all the required fields are filled, and show a modal
+      // Check if all the required fields are filled, and add the testimonial
       // If not, show errors under the unfilled fields
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -71,12 +96,35 @@ export default {
             'position' : this.ruleForm.position,
             'comment' : this.ruleForm.comment
           };
-          this.testimonialList.push(obj);
+          axios
+          .post("https://mats0035-midterm-axios.firebaseio.com/data.json", obj)
+          .then(response=>{
+            // get the new data from server and add to testimon
+            axios
+            .get("https://mats0035-midterm-axios.firebaseio.com/data.json")
+            .then(response => {
+              console.log(response.data);
+              // if(response)this.testimonialList2.push(response.data);
+              if(response.data)this.testimonialList = response.data;
+            })
+
+          });
         } else {
           return false;
         }
       });
     }
+  },
+  created() {
+    axios
+    .get("https://mats0035-midterm-axios.firebaseio.com/data.json")
+    .then(response => {
+       console.log(response.data);
+      if(response.data)this.testimonialList = response.data;
+    })
+    .catch(error => {
+      console.log("There was an error in getting data: " + error.response);
+    });
   }
 }
 </script>
@@ -89,20 +137,37 @@ export default {
     padding-top: 100px;
     padding-bottom: 70px;
   }
-.dialog-container {
-  display: flex;
-  margin: auto 20px;
-  text-align: left;
-}
 
-.testimonial-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-.testimonial-box {
-  flex: 0 calc(50% - 40px);
-  margin: 5px;
-  padding: 10px;
-  background-color: #e0daff;
-}
+  .dialog-container {
+    display: flex;
+    margin: auto 20px;
+    text-align: left;
+  }
+
+  .testimonial-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-box {
+    flex: 0 calc(50% - 40px);
+    margin: 5px;
+    padding: 10px;
+    background-color: #e0daff;
+  }
+
+  .testimonial-box:nth-child(odd), .two-columns:first-child {
+    margin-right: 20px;
+  }
+
+  .two-columns {
+    width: calc(50% - 10px) !important;
+    display: inline-block;
+  }
+
+  .el-button--primary {
+    float: right;
+    margin-bottom: 100px !important;
+  }
 </style>

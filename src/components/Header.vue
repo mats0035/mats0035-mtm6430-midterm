@@ -20,9 +20,14 @@
   justify-content: space-around;
   align-items: center;
 }
+
 #nav a {
   color: #ffcf3c;
   padding: 20px;
   text-decoration: none;
+}
+
+#nav a:hover {
+  color: #8572b9;
 }
 </style>

@@ -45,6 +45,7 @@ export default {
     text-align: left;
     padding-top: 100px;
   }
+
   .contact-container {
     display: flex;
     justify-content: space-evenly;
@@ -60,6 +61,7 @@ export default {
     padding: 0;
     list-style-type: none;
   }
+
   .hrsOperation {
     display: felx;
     justify-content: center;
